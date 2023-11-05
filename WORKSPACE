@@ -30,27 +30,29 @@ load("@com_github_mjbots_mjlib//tools/workspace:default.bzl",
 mjlib_add()
 
 # Now bazel-toolchain
-load("@com_github_mjbots_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "toolchains_llvm",
+    sha256 = "b7cd301ef7b0ece28d20d3e778697a5e3b81828393150bed04838c0c52963a01",
+    strip_prefix = "toolchains_llvm-0.10.3",
+    canonical_id = "0.10.3",
+    url = "https://github.com/grailbio/bazel-toolchain/releases/download/0.10.3/toolchains_llvm-0.10.3.tar.gz",
+)
+
+load("@toolchains_llvm//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+
 bazel_toolchain_dependencies()
 
-load("@com_github_mjbots_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
+load("@toolchains_llvm//toolchain:rules.bzl", "llvm_toolchain")
+
 llvm_toolchain(
     name = "llvm_toolchain",
     llvm_version = "10.0.0",
-    urls = {
-        "windows" : ["https://github.com/mjbots/bazel-toolchain/releases/download/0.5.6-mj20201011/LLVM-10.0.0-win64.tar.xz"],
-    },
-    sha256 = {
-        "windows" : "2851441d3993c032f98124a05e2aeb43010b7a85f0f7441103d36ae8d00afc18",
-    },
-    strip_prefix = {
-        "windows" : "LLVM",
-    }
 )
 
 load("@llvm_toolchain//:toolchains.bzl", "llvm_register_toolchains")
 llvm_register_toolchains()
-
 
 # Now rules_mbed
 load("@com_github_mjbots_rules_mbed//:rules.bzl", mbed_register = "mbed_register")

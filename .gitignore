@@ -9,3 +9,5 @@ fw/BUILD/
 fw/.mbedignore
 
 /bazel-*
+
+.DS_Store

@@ -33,8 +33,9 @@ build:target --cpu=stm32g4
 
 # Because something still tries to use the legacy cc_toolchain_suite (and I
 # can't figure out what, we manually specify it).
-build:windows --crosstool_top=@llvm_toolchain//:toolchain
-build:windows --compiler=clang
-build:windows --copt=-D_CRT_SECURE_NO_WARNINGS
-build:windows --copt -fms-compatibility-version=20
-build:windows --features=vendored_libc++
+# see https://github.com/grailbio/bazel-toolchain/blob/master/README.md#selecting-toolchains
+build --incompatible_enable_cc_toolchain_resolution
+build --compiler=clang
+build --copt=-D_CRT_SECURE_NO_WARNINGS
+build --copt -fms-compatibility-version=20
+build --features=vendored_libc++
